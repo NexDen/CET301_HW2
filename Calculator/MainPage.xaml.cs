@@ -15,6 +15,8 @@ public partial class MainPage : ContentPage
     private void OnNumberPressed(object? sender, EventArgs e)
     {
         Button pressedButton = sender as Button;
+        //test açıklama
+        //test açıklama
         if (pressedButton != null)
         {
             if (isFirstNumberAfterOperator)
