@@ -6,6 +6,9 @@ public partial class MainPage : ContentPage
     private double secondNumber = 0;
     private string currentOperator = ""; // + - * / =
     private bool isFirstNumberAfterOperator = true;
+    private bool decimalPressed = false;
+
+    private bool isFirstNumber = false;
     public MainPage()
     {
         InitializeComponent();
@@ -25,6 +28,14 @@ public partial class MainPage : ContentPage
             }
             else
             {
+
+                if (pressedButton.Text == ",") {
+
+                    if (decimalPressed) return;
+
+                    decimalPressed = true;
+                }
+
                 Display.Text = Display.Text + pressedButton.Text;
             }
         }
@@ -34,40 +45,60 @@ public partial class MainPage : ContentPage
     private void OnOperatorPressed(object? sender, EventArgs e)
     {
         Button pressedButton = sender as Button;
+        double result = 0;
+        switch (pressedButton.Text) {
+            case "C":
+                firstNumber = 0;
+                secondNumber = 0;
+                currentOperator = "";
+                isFirstNumberAfterOperator = false;
+                decimalPressed = false;
+                return;
 
-        if (isFirstNumberAfterOperator)
-        {
-            currentOperator = pressedButton.Text;
-            return;
-        }
-        
-        isFirstNumberAfterOperator = true;
-        if (currentOperator == "")
-        {
-            currentOperator = pressedButton.Text;
-            firstNumber = Double.Parse(Display.Text);
-          
-        }
-        else
-        {
             
-            secondNumber = Double.Parse(Display.Text);
-            double result=0;
-            switch (currentOperator)
-            {
-                case "+" :   result = firstNumber + secondNumber; break;
-                case "-" :   result = firstNumber - secondNumber; break;
-                case "*" :   result = firstNumber * secondNumber; break;
-                case "/" :   result = firstNumber / secondNumber; break;
-                
-                
+            case "CE":
+                Display.Text = "0";
+                return;
+
+
+            if (isFirstNumber) {
+                firstNumber = double.Parse(Display.Text);
+                isFirstNumber = false;
             }
 
-            Display.Text = result.ToString();
-            currentOperator = pressedButton.Text;
-            if(pressedButton.Text == "=") currentOperator = "";
-            firstNumber = result;
-            
+            case "²":
+                result = firstNumber * firstNumber;
+                break;
+
+            case "√":
+                result = Math.Pow(firstNumber, .5);
+                break;
+
+
+            if (!isFirstNumber){
+                secondNumber = double.Parse(Display.Text);
+            }
+
+            case "+":
+                result = firstNumber + secondNumber;
+                break;
+
+            case "*":
+                result = firstNumber * secondNumber;
+                break;
+
+            case "-":
+                result = firstNumber - secondNumber;
+                break;
+
+            case "/":
+                result = firstNumber / secondNumber;
+                break;
+
+            case "=":
+                Display.Text = result.ToString();
+                break;
         }
+
     }
-}
+};
