@@ -15,8 +15,8 @@
         </Grid.RowDefinitions>
         <Entry x:Name="Display" Grid.Row="0" Grid.Column="0" Keyboard="Numeric" Grid.ColumnSpan="4" ></Entry>
 
-        <Button x:Name="ClearEntryButton" Clicked="OnOperatorPressed" Text="CE" Grid.Row="1" Grid.Column="0"></Button>
-        <Button x:Name="ClearButton" Clicked="OnOperatorPressed" Text="C" Grid.Row="1" Grid.Column="1"></Button>
+        <Button x:Name="ClearEntryButton" Clicked="ClearEntry" Text="CE" Grid.Row="1" Grid.Column="0"></Button>
+        <Button x:Name="ClearButton" Clicked="Clear" Text="C" Grid.Row="1" Grid.Column="1"></Button>
         <Button x:Name="SquareButton" Clicked="OnOperatorPressed" Text="²" Grid.Row="1" Grid.Column="2"></Button>
         <Button x:Name="SQRTButton" Clicked="OnOperatorPressed" Text="√" Grid.Row="1" Grid.Column="3"></Button>
 

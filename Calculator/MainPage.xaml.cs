@@ -8,7 +8,6 @@ public partial class MainPage : ContentPage
     private bool isFirstNumberAfterOperator = true;
     private bool decimalPressed = false;
 
-    private bool isFirstNumber = false;
     public MainPage()
     {
         InitializeComponent();
@@ -36,7 +35,7 @@ public partial class MainPage : ContentPage
                     decimalPressed = true;
                 }
 
-                Display.Text = Display.Text + pressedButton.Text;
+                Display.Text += pressedButton.Text;
             }
         }
         
@@ -46,59 +45,73 @@ public partial class MainPage : ContentPage
     {
         Button pressedButton = sender as Button;
         double result = 0;
-        switch (pressedButton.Text) {
-            case "C":
-                firstNumber = 0;
-                secondNumber = 0;
-                currentOperator = "";
-                isFirstNumberAfterOperator = false;
-                decimalPressed = false;
-                return;
 
-            
-            case "CE":
-                Display.Text = "0";
-                return;
-
-
-            if (isFirstNumber) {
-                firstNumber = double.Parse(Display.Text);
-                isFirstNumber = false;
-            }
-
-            case "²":
-                result = firstNumber * firstNumber;
-                break;
-
-            case "√":
-                result = Math.Pow(firstNumber, .5);
-                break;
-
-
-            if (!isFirstNumber){
-                secondNumber = double.Parse(Display.Text);
-            }
-
-            case "+":
-                result = firstNumber + secondNumber;
-                break;
-
-            case "*":
-                result = firstNumber * secondNumber;
-                break;
-
-            case "-":
-                result = firstNumber - secondNumber;
-                break;
-
-            case "/":
-                result = firstNumber / secondNumber;
-                break;
-
-            case "=":
-                Display.Text = result.ToString();
-                break;
+        if (isFirstNumberAfterOperator)
+        {
+            currentOperator = pressedButton.Text;
+            return;
         }
 
+        isFirstNumberAfterOperator = true;
+        if (currentOperator == "")
+        {
+            currentOperator = pressedButton.Text;
+            firstNumber = Double.Parse(Display.Text);
+            switch (currentOperator)
+            {
+                case "²": 
+                    result = firstNumber * firstNumber;
+                    Display.Text = result.ToString();
+                    currentOperator = pressedButton.Text;
+                    if (pressedButton.Text == "=") currentOperator = "";
+                    firstNumber = result;
+                    break;
+                case "√": 
+                    result = Math.Pow(firstNumber, 0.5);
+                    Display.Text = result.ToString();
+                    currentOperator = pressedButton.Text;
+                    if (pressedButton.Text == "=") currentOperator = "";
+                    firstNumber = result;
+                    break;
+            }
+        }
+        else
+        {
+            secondNumber = Double.Parse(Display.Text);
+            switch (currentOperator)
+            {
+                case "+": result = firstNumber + secondNumber; break;
+                case "-": result = firstNumber - secondNumber; break;
+                case "*": result = firstNumber * secondNumber; break;
+                case "/": result = firstNumber / secondNumber; break;
+            }
+
+            Display.Text = result.ToString();
+            currentOperator = pressedButton.Text;
+            if (pressedButton.Text == "=") currentOperator = "";
+            firstNumber = result;
+
+        }
+    }
+    public void Clear(object? sender, EventArgs e)
+    {
+        firstNumber = 0;
+        secondNumber = 0;
+        currentOperator = "";
+        isFirstNumberAfterOperator = true;
+        decimalPressed = false;
+        Display.Text = "0";
+
+    }
+
+    public void ClearEntry(object? sender, EventArgs e)
+    {
+        Display.Text = "0";
+        if (currentOperator != "")
+        {
+            secondNumber = 0;
+            return;
+        }
+        firstNumber = 0;
     }
 };
